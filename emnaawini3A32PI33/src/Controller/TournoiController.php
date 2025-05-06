@@ -19,6 +19,10 @@ final class TournoiController extends AbstractController
     {
         $tournois = $tournoiRepository->findAll();
 
+        if (!$tournois) {
+            $this->addFlash('error', 'No tournaments found.');
+        }
+
         return $this->render('tournoi/index.html.twig', [
             'tournois' => $tournois,
         ]);
@@ -53,6 +57,11 @@ final class TournoiController extends AbstractController
             throw $this->createNotFoundException('The tournoi does not exist.');
         }
 
+<<<<<<< Updated upstream
+=======
+        $matches = $tournoi->getMatchs();
+
+>>>>>>> Stashed changes
         return $this->render('tournoi/show.html.twig', [
             'tournoi' => $tournoi,
         ]);
@@ -76,9 +85,22 @@ final class TournoiController extends AbstractController
             return $this->redirectToRoute('app_tournoi_index', [], Response::HTTP_SEE_OTHER);
         }
 
+<<<<<<< Updated upstream
         return $this->render('tournoi/edit.html.twig', [
             'tournoi' => $tournoi,
             'form' => $form,
+=======
+        $equipes = $equipeRepository->findAll();
+        $terrains = $terrainRepository->findAll();
+        $matches = $tournoi->getMatchs(); 
+
+        return $this->render('tournoi/edit.html.twig', [
+            'tournoi' => $tournoi,
+            'form' => $form,
+            'equipes' => $equipes,
+            'terrains' => $terrains,
+            'matches' => $matches,
+>>>>>>> Stashed changes
         ]);
     }
 

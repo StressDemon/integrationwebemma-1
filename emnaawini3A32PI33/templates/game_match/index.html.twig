@@ -369,11 +369,35 @@
                                         </tbody>
                                     </table>
                                 </div>
+<<<<<<< Updated upstream
+=======
+
+                                <div class="pagination">
+                                    {{ knp_pagination_render(game_matches) }}
+                                </div>
+>>>>>>> Stashed changes
                             {% else %}
                                 <div class="no-results">
                                     <i class="bi bi-info-circle me-2"></i> No game matches found.
                                 </div>
                             {% endif %}
+                        </div>
+                        <div class="navigation-buttons text-center mt-4">
+                            <a href="{{ path('app_game_match_index') }}" class="btn btn-secondary me-2">
+                                Game Matches
+                            </a>
+                            <a href="{{ path('app_tournoi_index') }}" class="btn btn-secondary me-2">
+                                Tournaments
+                            </a>
+                            <a href="{{ path('app_equipe_index') }}" class="btn btn-secondary me-2">
+                                Teams
+                            </a>
+                            <a href="{{ path('app_joueur_index') }}" class="btn btn-secondary me-2">
+                                Players
+                            </a>
+                            <a href="{{ path('app_terrain_index') }}" class="btn btn-secondary">
+                                Terrains
+                            </a>
                         </div>
                     </div>
 

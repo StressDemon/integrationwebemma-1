@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Upload Teams CSV - Gestion | Hive{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('sneat-1.0.0/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('sneat-1.0.0/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('sneat-1.0.0/assets/css/demo.css') }}" />
+    <style>
+        .matches-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+        }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 15px;
+        }
+        .header-section h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        .alert {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+        .language-switcher {
+            margin-bottom: 20px;
+        }
+        .language-switcher .btn {
+            margin-right: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div class="layout-page">
+            <div class="content-wrapper">
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="matches-wrapper">
+                        <div class="header-section">
+                            <h1>
+                                {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                    Importer des Équipes via CSV
+                                {% else %}
+                                    Upload Teams CSV
+                                {% endif %}
+                            </h1>
+                        </div>
+
+                        <!-- Language Switcher -->
+                        <div class="language-switcher">
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'lang': 'en'})) }}"
+                               class="btn {% if app.request.query.get('lang', 'en') == 'en' %}btn-primary{% else %}btn-secondary{% endif %}">
+                                🇬🇧
+                            </a>
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'lang': 'fr'})) }}"
+                               class="btn {% if app.request.query.get('lang', 'en') == 'fr' %}btn-primary{% else %}btn-secondary{% endif %}">
+                                🇫🇷
+                            </a>
+                        </div>
+
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success">{{ message }}</div>
+                        {% endfor %}
+                        {% for message in app.flashes('error') %}
+                            <div class="alert alert-danger">{{ message }}</div>
+                        {% endfor %}
+
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="csv_file" class="form-label">
+                                    {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                        Fichier CSV
+                                    {% else %}
+                                        CSV File
+                                    {% endif %}
+                                </label>
+                                <input type="file" name="csv_file" id="csv_file" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                    Importer
+                                {% else %}
+                                    Upload
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

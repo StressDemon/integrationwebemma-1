@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Joueur;
+use App\Entity\Users;
 use App\Form\JoueurType;
 use App\Repository\JoueurRepository;
+use App\Service\AzureFaceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +16,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/joueur')]
 final class JoueurController extends AbstractController
 {
+    public function __construct(private AzureFaceService $azureFaceService) {}
+
     #[Route(name: 'app_joueur_index', methods: ['GET'])]
     public function index(JoueurRepository $joueurRepository): Response
     {
@@ -30,6 +34,14 @@ final class JoueurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $selectedUserId = $form->get('id_user')->getData();
+
+            $user = $entityManager->getRepository(Users::class)->find($selectedUserId);
+
+            if ($user) {
+                $joueur->setNom_joueur($user->getUsername());
+            }
+
             $entityManager->persist($joueur);
             $entityManager->flush();
 

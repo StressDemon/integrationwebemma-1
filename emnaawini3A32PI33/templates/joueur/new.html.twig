@@ -387,7 +387,7 @@
                                     {{ form_start(form, {'attr': {'id': 'joueur-form', 'novalidate': 'novalidate'}}) }}
                                         <div class="form-row">
                                             {% for field in form %}
-                                                {% if field.vars.name != '_token' %}
+                                                {% if field.vars.name != '_token' and field.vars.name != 'url_photo' %}
                                                     <div class="form-group">
                                                         {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
                                                         {{ form_widget(field, {'attr': {'class': 'form-control', 'aria-describedby': 'error-' ~ field.vars.id}}) }}
@@ -396,6 +396,14 @@
                                                     </div>
                                                 {% endif %}
                                             {% endfor %}
+                                            <div class="form-group">
+                                                {{ form_label(form.url_photo, null, {'label_attr': {'class': 'form-label'}}) }}
+                                                {{ form_widget(form.url_photo, {'attr': {'class': 'form-control'}}) }}
+                                                {% for flashError in app.flashes('error') %}
+                                                    <div class="alert alert-danger">{{ flashError }}</div>
+                                                {% endfor %}
+                                                {{ form_errors(form.url_photo) }}
+                                            </div>
                                         </div>
                                         <div class="form-actions">
                                             <a href="{{ path('app_joueur_index') }}" class="btn btn-cancel text-white" aria-label="Cancel and return to list">Cancel</a>

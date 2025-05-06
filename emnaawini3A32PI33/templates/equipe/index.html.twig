@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Equipe Index - Gestion | Hive{% endblock %}
+{% block title %}
+    {% if app.request.query.get('lang', 'en') == 'fr' %}
+        Index des Équipes - Gestion | Hive
+    {% else %}
+        Equipe Index - Gestion | Hive
+    {% endif %}
+{% endblock %}
 
 {% block stylesheets %}
     <!-- Fonts -->
@@ -39,12 +45,11 @@
             border-bottom: 4px solid #3498db;
             padding-bottom: 15px;
         }
-        .header-section h1 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin: 0;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        .language-switcher {
+            margin-bottom: 20px;
+        }
+        .language-switcher .btn {
+            margin-right: 5px;
         }
         .breadcrumb {
             background: transparent;
@@ -344,11 +349,36 @@
 
                             <!-- Header -->
                             <div class="header-section">
-                                <h1>Equipe Index</h1>
+                                <h1>
+                                    {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                        Index des Équipes
+                                    {% else %}
+                                        Equipe Index
+                                    {% endif %}
+                                </h1>
                                 <a href="{{ path('app_equipe_new') }}" class="btn btn-add-equipe text-white" aria-label="Create new team">
-                                    <i class="bi bi-plus-circle me-2"></i> Create New Equipe
+                                    <i class="bi bi-plus-circle me-2"></i>
+                                    {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                        Créer une Nouvelle Équipe
+                                    {% else %}
+                                        Create New Equipe
+                                    {% endif %}
                                 </a>
                             </div>
+
+                            <!-- Language Switcher -->
+                            <div class="language-switcher">
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'lang': 'en'})) }}"
+                                   class="btn {% if app.request.query.get('lang', 'en') == 'en' %}btn-primary{% else %}btn-secondary{% endif %}">
+                                    🇬🇧
+                                </a>
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'lang': 'fr'})) }}"
+                                   class="btn {% if app.request.query.get('lang', 'en') == 'fr' %}btn-primary{% else %}btn-secondary{% endif %}">
+                                    🇫🇷
+                                </a>
+                            </div>
+
+                            <a href="{{ path('app_equipe_upload_csv') }}" class="btn btn-primary mb-3">Upload Teams CSV</a>
 
                             <!-- Flash Messages -->
                             {% for message in app.flashes('success') %}
@@ -365,19 +395,43 @@
                             {% endfor %}
 
                             <!-- Table -->
-                            {% if equipes|length > 0 %}
+                            {% if pagination|length > 0 %}
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover">
                                         <thead class="table-dark">
                                             <tr>
-                                                <th scope="col">ID Equipe</th>
-                                                <th scope="col">Nom Equipe</th>
-                                                <th scope="col">Type Equipe</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">
+                                                    {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                                        ID de l'Équipe
+                                                    {% else %}
+                                                        Team ID
+                                                    {% endif %}
+                                                </th>
+                                                <th scope="col">
+                                                    {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                                        Nom de l'Équipe
+                                                    {% else %}
+                                                        Team Name
+                                                    {% endif %}
+                                                </th>
+                                                <th scope="col">
+                                                    {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                                        Type d'Équipe
+                                                    {% else %}
+                                                        Team Type
+                                                    {% endif %}
+                                                </th>
+                                                <th scope="col">
+                                                    {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                                        Actions
+                                                    {% else %}
+                                                        Actions
+                                                    {% endif %}
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for equipe in equipes %}
+                                            {% for equipe in pagination %}
                                                 <tr>
                                                     <td>{{ equipe.idEquipe }}</td>
                                                     <td>{{ equipe.nomEquipe }}</td>
@@ -407,12 +461,40 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <!-- Pagination Controls -->
+                                <div class="pagination">
+                                    {{ knp_pagination_render(pagination) }}
+                                </div>
                             {% else %}
                                 <div class="no-results">
-                                    <i class="bi bi-info-circle me-2"></i> No teams found.
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    {% if app.request.query.get('lang', 'en') == 'fr' %}
+                                        Aucune équipe trouvée.
+                                    {% else %}
+                                        No teams found.
+                                    {% endif %}
                                 </div>
                             {% endif %}
                         </div>
+                    </div>
+
+                    <div class="navigation-buttons text-center mt-4">
+                        <a href="{{ path('app_game_match_index') }}" class="btn btn-secondary me-2">
+                            Game Matches
+                        </a>
+                        <a href="{{ path('app_tournoi_index') }}" class="btn btn-secondary me-2">
+                            Tournaments
+                        </a>
+                        <a href="{{ path('app_equipe_index') }}" class="btn btn-secondary me-2">
+                            Teams
+                        </a>
+                        <a href="{{ path('app_joueur_index') }}" class="btn btn-secondary me-2">
+                            Players
+                        </a>
+                        <a href="{{ path('app_terrain_index') }}" class="btn btn-secondary">
+                            Terrains
+                        </a>
                     </div>
 
                     <!-- Footer -->
